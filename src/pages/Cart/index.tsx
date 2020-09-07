@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { View } from 'react-native';
 
@@ -36,26 +37,42 @@ interface Product {
 }
 
 const Cart: React.FC = () => {
-  const { increment, decrement, products } = useCart();
+  const { increment, decrement, deleteToCart, products } = useCart();
 
   function handleIncrement(id: string): void {
     // TODO
+    increment(id);
   }
 
   function handleDecrement(id: string): void {
     // TODO
+    decrement(id);
+  }
+
+  function handleDeleteToCart(id: string): void {
+    deleteToCart(id);
   }
 
   const cartTotal = useMemo(() => {
     // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
+    const totalPrice = products.reduce((acumulator, product) => {
+      const productSbtotal = product.price * product.quantity;
 
-    return formatValue(0);
+      return acumulator + productSbtotal;
+    }, 0);
+
+    return formatValue(totalPrice);
   }, [products]);
 
   const totalItensInCart = useMemo(() => {
     // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
+    const totalCount = products.reduce((accumulator, product) => {
+      const total = product.quantity;
 
-    return 0;
+      return accumulator + total;
+    }, 0);
+
+    return totalCount;
   }, [products]);
 
   return (
@@ -99,6 +116,13 @@ const Cart: React.FC = () => {
                   onPress={() => handleDecrement(item.id)}
                 >
                   <FeatherIcon name="minus" color="#E83F5B" size={16} />
+                </ActionButton>
+                <ActionButton onPress={() => handleDeleteToCart(item.id)}>
+                  <MaterialIcon
+                    name="remove-shopping-cart"
+                    color="#E83F5B"
+                    size={16}
+                  />
                 </ActionButton>
               </ActionContainer>
             </Product>
